@@ -21,5 +21,12 @@
   },
   "engines": {
     "node": "0.10.x"
+  },
+  "devDependencies": {
+    "chai": "^4.0.2",
+    "coffee-script": "^1.12.6",
+    "hubot-test-helper": "^1.5.1",
+    "mocha": "^3.4.2",
+    "sinon": "^2.3.4"
   }
 }
