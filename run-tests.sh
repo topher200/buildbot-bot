@@ -1,3 +1,3 @@
 #!/bin/bash
 
-mocha --compilers coffee:coffee-script/register test/*.coffee
+source .env && mocha --compilers coffee:coffee-script/register test/*.coffee
