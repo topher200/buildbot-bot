@@ -73,8 +73,6 @@ module.exports = (robot) ->
               res.send "Error occurred: #{result.statusCode}"
               return
 
-            # job is building! lets get new job's build id
-            # TODO
             res.send "Building #{branch} on #{builder}"
 
   robot.respond /buildbot auth (.*)/i, (res) ->
