@@ -26,7 +26,7 @@ describe 'buildbot integration', ->
     it 'should respond with build message', ->
       expect(@room.messages).to.eql [
         ['alice', 'hubot build stable_db_migration on demo-ppc-eight']
-        ['hubot', 'building stable_db_migration on demo-ppc-eight']
+        ['hubot', 'Building stable_db_migration on demo-ppc-eight']
       ]
 
     # this test relies on timing - the previous build should still be going

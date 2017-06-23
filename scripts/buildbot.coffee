@@ -75,7 +75,7 @@ module.exports = (robot) ->
 
             # job is building! lets get new job's build id
             # TODO
-            res.send "building #{branch} on #{builder}"
+            res.send "Building #{branch} on #{builder}"
 
   robot.respond /buildbot auth (.*)/i, (res) ->
     robot.brain.set 'oauthproxy', res.match[1]
