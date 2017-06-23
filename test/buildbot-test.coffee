@@ -7,13 +7,14 @@ helper = new Helper('../scripts/buildbot.coffee')
 
 OAUTHPROXY = process.env.HUBOT_OAUTHPROXY_VAL
 unless OAUTHPROXY?
-  console.log "no HUBOT_OAUTHPROXY_VAL in environment: please set and try again"
-  process.exit(1)
+  console.log "no HUBOT_OAUTHPROXY_VAL in environment: testing may be broken"
 
 describe 'buildbot integration', ->
   beforeEach ->
     @room = helper.createRoom()
-    @room.robot.brain.set 'oauthproxy', OAUTHPROXY
+    if not @room.robot.brain.get 'oauthproxy'
+      console.log 'setting oauthproxy val from env, for testing'
+      @room.robot.brain.set 'oauthproxy', OAUTHPROXY
 
   afterEach ->
     @room.destroy()
