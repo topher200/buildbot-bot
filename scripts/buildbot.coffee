@@ -42,7 +42,7 @@ module.exports = (robot) ->
           res.send "Error occurred: #{err}"
           return
         if result.statusCode == 403
-          res.send "Buildbot auth failed"
+          res.send "Buildbot auth failed. @topher - fix me!"
           return
         preRequestBuilderStatus = JSON.parse body
         if (preRequestBuilderStatus.currentBuilds.length > 0 or
