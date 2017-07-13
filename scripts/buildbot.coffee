@@ -37,7 +37,7 @@ module.exports = (robot) ->
       .header('Cookie', ['_oauthproxy="' + robot.brain.get('oauthproxy') + '"'])
       .header('Accept', 'application/json')
       .get() (err, result, body) ->
-        console.log "Made pre-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
+        # console.log "Made pre-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
         if err
           res.send "Error occurred: #{err}"
           return
@@ -62,7 +62,7 @@ module.exports = (robot) ->
           .header('Cookie', ['_oauthproxy="' + robot.brain.get('oauthproxy') + '"'])
           .header('Content-Type', 'application/x-www-form-urlencoded')
           .post(payload) (err, result, body) ->
-            console.log "Made build request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
+            # console.log "Made build request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
             if err
               res.send "Error occurred: #{err}"
               return
