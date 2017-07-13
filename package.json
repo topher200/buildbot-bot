@@ -5,6 +5,7 @@
   "author": "t.brown@wordstream.com",
   "description": "Bot to control Buildbot through Slack",
   "dependencies": {
+    "cron": "^0.3.3",
     "hubot": "^2.19.0",
     "hubot-diagnostics": "0.0.1",
     "hubot-google-images": "^0.2.6",
