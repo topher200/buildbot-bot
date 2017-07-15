@@ -147,7 +147,9 @@ module.exports = function(robot) {
                     .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
                     .header('Accept', 'application/json')
                     .get()(function(err, result, body) {
-                        console.log(`build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
+                        if (DEBUG_LOGGING) {
+                            console.log(`build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
+                        }
                         if (err) {
                             console.log(`Error occurred: ${err}`);
                             return;
@@ -160,10 +162,10 @@ module.exports = function(robot) {
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
                         } else if (status.text.includes('failed')) {
-                            robot.messageRoom(build.room, `Build ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}> failed`);
+                            robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> failed`);
                             build.responded = true;
                         } else if (status.text.includes('successful')) {
-                            robot.messageRoom(build.room, `Build ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}> completed`);
+                            robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> completed`);
                             build.responded = true;
                         } else {
                             robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status ${status.text}`);
