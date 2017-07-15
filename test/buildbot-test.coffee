@@ -27,12 +27,12 @@ describe 'buildbot integration', ->
     it 'should respond with build message', ->
       expect(@room.messages).to.eql [
         ['alice', 'hubot build stable_db_migration on demo-ppc-eight']
-        ['hubot', 'Building stable_db_migration on demo-ppc-eight']
+        ['hubot', 'Building stable_db_migration on <demo-ppc-eight|https://buildbot.wordstream.com/builders/demo-ppc-eight/builds/185>']
       ]
 
     # this test relies on timing - the previous build should still be going
     it 'should respond with "already building" message', ->
       expect(@room.messages).to.eql [
         ['alice', 'hubot build stable_db_migration on demo-ppc-eight']
-        ['hubot', 'Unknown build already in progress on demo-ppc-eight']
+        ['hubot', 'Build already in progress on demo-ppc-eight']
       ]
