@@ -71,6 +71,7 @@ module.exports = function(robot) {
                     preRequestBuilderStatus = JSON.parse(body);
                 } catch(e) {
                     res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
+                    return;
                 }
                 if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
                     (preRequestBuilderStatus.pendingBuilds > 0)) {
