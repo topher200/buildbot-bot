@@ -195,6 +195,7 @@ module.exports = function(robot) {
                             build.responded = true;
                             return;
                         }
+                        console.log('text: ' + status.text);
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
                         } else if (status.text.toLowerCase().includes('failed')) {
