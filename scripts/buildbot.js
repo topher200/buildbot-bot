@@ -32,6 +32,13 @@ const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
 
 const cronJob = require('cron').CronJob;
 
+// isArray polyfill
+if (!Array.isArray) {
+    Array.isArray = function(arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+}
+
 module.exports = function(robot) {
 
     let notifier;
