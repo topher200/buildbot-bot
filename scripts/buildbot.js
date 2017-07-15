@@ -195,13 +195,19 @@ module.exports = function(robot) {
                             build.responded = true;
                             return;
                         }
-                        console.log('text: ' + status.text);
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
-                        } else if (status.text.toLowerCase().includes('failed')) {
+                            return;
+                        }
+                        var statusText = '';
+                        if Array.isArray(status.text) {
+                            statusText = status.text.join(' ');
+                        }
+                        statusText = statusText.toLowerCase();
+                        if (statusText.includes('failed')) {
                             robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
                             build.responded = true;
-                        } else if (status.text.toLowerCase().includes('successful')) {
+                        } else if (statusText.includes('successful')) {
                             robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>|${build.builder}!`);
                             build.responded = true;
                         } else {
