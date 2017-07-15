@@ -60,7 +60,7 @@ module.exports = function(robot) {
                     console.log(`Made pre-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                 }
                 if (err) {
-                    res.send(`Error occurred: ${err}`);
+                    res.send(`Error occurred: ${err}. @topher`);
                     return;
                 }
                 if (result.statusCode === 403) {
@@ -95,7 +95,7 @@ module.exports = function(robot) {
                             console.log(`Made build request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                         }
                         if (err) {
-                            res.send(`Error occurred: ${err}`);
+                            res.send(`Error occurred: ${err} @topher`);
                             return;
                         }
                         if (result.statusCode === 403) {
@@ -103,7 +103,7 @@ module.exports = function(robot) {
                             return;
                         }
                         if (result.statusCode !== 302) {
-                            res.send(`Error occurred: ${result.statusCode}`);
+                            res.send(`Error occurred: ${result.statusCode} @topher`);
                             return;
                         }
 
@@ -119,7 +119,7 @@ module.exports = function(robot) {
                                     console.log(`Made post-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                                 }
                                 if (err) {
-                                    res.send(`Error occurred: ${err}`);
+                                    res.send(`Error occurred: ${err} @topher`);
                                     return;
                                 }
                                 if (result.statusCode === 403) {
@@ -191,20 +191,20 @@ module.exports = function(robot) {
                         try {
                             status = JSON.parse(body);
                         } catch (e) {
-                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} monitoring failed.`);
+                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} monitoring failed. @topher`);
                             build.responded = true;
                             return;
                         }
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
-                        } else if (status.text.includes('failed')) {
+                        } else if (status.text.toLowerCase().includes('failed')) {
                             robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> failed`);
                             build.responded = true;
-                        } else if (status.text.includes('successful')) {
+                        } else if (status.text.toLowerCase().includes('successful')) {
                             robot.messageRoom(build.room, `Built ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>!`);
                             build.responded = true;
                         } else {
-                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status ${status.text}`);
+                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status "${status.text}". @topher`);
                             build.responded = true;
                         }
                     });
