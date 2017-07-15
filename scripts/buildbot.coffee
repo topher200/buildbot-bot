@@ -1,7 +1,6 @@
 # Description:
 #   Provides an interface to Buildbot v0.8.10
 #
-# TODO
 # Dependencies:
 #   "cron": "^0.3.3",
 #
