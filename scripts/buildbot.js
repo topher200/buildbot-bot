@@ -35,7 +35,7 @@ const cronJob = require('cron').CronJob;
 module.exports = function(robot) {
 
     let notifier;
-    robot.respond(/build (.*) on ([^\s.]*)( ?[^\.]*)\.? ?(.*)/i, function(res) {
+    robot.respond(/build (\S*) on ([^\s.]*)( ?[^\.]*)\.? ?(.*)/i, function(res) {
         // parse request
         const branch = res.match[1];
         const builder = res.match[2];
