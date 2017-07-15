@@ -24,6 +24,8 @@ CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *'
 
 cronJob = require('cron').CronJob
 
+DEBUG_LOGGING = false
+
 module.exports = (robot) ->
 
   robot.respond /build (.*) on (.*)/i, (res) ->
@@ -36,7 +38,8 @@ module.exports = (robot) ->
       .header('Cookie', ['_oauthproxy="' + robot.brain.get('oauthproxy') + '"'])
       .header('Accept', 'application/json')
       .get() (err, result, body) ->
-        console.log "Made pre-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
+        if DEBUG_LOGGING
+          console.log "Made pre-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
         if err
           res.send "Error occurred: #{err}"
           return
@@ -61,7 +64,8 @@ module.exports = (robot) ->
           .header('Cookie', ['_oauthproxy="' + robot.brain.get('oauthproxy') + '"'])
           .header('Content-Type', 'application/x-www-form-urlencoded')
           .post(payload) (err, result, body) ->
-            console.log "Made build request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
+            if DEBUG_LOGGING
+              console.log "Made build request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
             if err
               res.send "Error occurred: #{err}"
               return
@@ -77,7 +81,8 @@ module.exports = (robot) ->
               .header('Cookie', ['_oauthproxy="' + robot.brain.get('oauthproxy') + '"'])
               .header('Accept', 'application/json')
               .get() (err, result, body) ->
-                console.log "Made post-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
+                if DEBUG_LOGGING
+                  console.log "Made post-build GET request. #{err}, #{result.statusCode}, #{result.getHeader}, #{body}"
                 if err
                   res.send "Error occurred: #{err}"
                   return
