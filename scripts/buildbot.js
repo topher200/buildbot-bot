@@ -200,7 +200,7 @@ module.exports = function(robot) {
                             return;
                         }
                         var statusText = '';
-                        if Array.isArray(status.text) {
+                        if (Array.isArray(status.text)) {
                             statusText = status.text.join(' ');
                         }
                         statusText = statusText.toLowerCase();
