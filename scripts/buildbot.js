@@ -209,12 +209,11 @@ module.exports = function(robot) {
                         if (Array.isArray(status.text)) {
                             statusText = status.text.join(' ');
                         }
-                        statusText = statusText.toLowerCase();
-                        if (statusText.includes('successful')) {
+                        if (statusText.toLowerCase().includes('successful')) {
                             robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>!`);
                             build.responded = true;
-                        } else if (statusText.includes('failed') || statusText.includes('exception')) {
-                            robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
+                        } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
+                            robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed: "${statusText}"`);
                             build.responded = true;
                         } else {
                             console.log(`not enough info to determine status. status: "${statusText}"`);
