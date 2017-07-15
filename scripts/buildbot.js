@@ -74,6 +74,10 @@ module.exports = function(robot) {
                     res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
                     return;
                 }
+                if (!preRequestBuilderStatus.currentBuilds) {
+                    res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
+                    return;
+                }
                 if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
                     (preRequestBuilderStatus.pendingBuilds > 0)) {
                     res.send(`Build already in progress on ${builder}`);
