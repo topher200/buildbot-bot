@@ -210,15 +210,14 @@ module.exports = function(robot) {
                             statusText = status.text.join(' ');
                         }
                         statusText = statusText.toLowerCase();
-                        if (statusText.includes('failed')) {
-                            robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
-                            build.responded = true;
-                        } else if (statusText.includes('successful')) {
+                        if (statusText.includes('successful')) {
                             robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>!`);
                             build.responded = true;
-                        } else {
-                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status "${status.text}". @topher`);
+                        } else if (statusText.includes('failed') || statusText.includes('exception')) {
+                            robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
                             build.responded = true;
+                        } else {
+                            console.log(`not enough info to determine status. status: "${statusText}"`);
                         }
                     });
             });
