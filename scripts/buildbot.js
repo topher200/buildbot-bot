@@ -210,7 +210,7 @@ module.exports = function(robot) {
                             robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
                             build.responded = true;
                         } else if (statusText.includes('successful')) {
-                            robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>|${build.builder}!`);
+                            robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>!`);
                             build.responded = true;
                         } else {
                             robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status "${status.text}". @topher`);
