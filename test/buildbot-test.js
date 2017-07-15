@@ -3,7 +3,7 @@ const chai = require('chai');
 
 const { expect } = chai;
 
-const helper = new Helper('../scripts/buildbot.coffee');
+const helper = new Helper('../scripts/buildbot.js');
 
 const OAUTHPROXY = process.env.HUBOT_OAUTHPROXY_VAL;
 if (!OAUTHPROXY) {
