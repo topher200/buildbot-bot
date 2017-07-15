@@ -210,11 +210,11 @@ module.exports = function(robot) {
                             statusText = status.text.join(' ');
                         }
                         if (statusText.toLowerCase().includes('successful')) {
-                            robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>!`);
+                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>`);
                             build.responded = true;
                         } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
                             if (statusText.toLowerCase() != 'failed') {
-                                robot.messageRoom(build.room, `:goodbot: Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
+                                robot.messageRoom(build.room, `:badbot: Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
                             } else {
                                 // boring message
                                 robot.messageRoom(build.room, `:badbot: Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:`);
