@@ -180,7 +180,13 @@ module.exports = function(robot) {
                             robot.messageRoom('topher', "Buildbot auth failed for monitor process");
                             return;
                         }
-                        const status = JSON.parse(body);
+                        try {
+                            const status = JSON.parse(body);
+                        } catch (e) {
+                            robot.messageRoom(build.room, `${build.builder}:${build.buildId} monitoring failed.`);
+                            build.responded = true;
+                            return;
+                        }
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
                         } else if (status.text.includes('failed')) {
