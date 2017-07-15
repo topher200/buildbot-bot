@@ -134,9 +134,9 @@ module.exports = function(robot) {
 
                                 const buildId = preRequestBuilderStatus.currentBuilds[0];
                                 if (checkbox) {
-                                    res.send(`Building ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}> with full=on`);
+                                    res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}> with full=on`);
                                 } else {
-                                    res.send(`Building ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}>`);
+                                    res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}>`);
                                 }
                                 let builds = robot.brain.get('builds');
                                 if (!builds) {
@@ -198,10 +198,10 @@ module.exports = function(robot) {
                         if (!status.text || (status.text.length === 0)) {
                             // we're still running
                         } else if (status.text.toLowerCase().includes('failed')) {
-                            robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> failed`);
+                            robot.messageRoom(build.room, `Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> failed`);
                             build.responded = true;
                         } else if (status.text.toLowerCase().includes('successful')) {
-                            robot.messageRoom(build.room, `Built ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>!`);
+                            robot.messageRoom(build.room, `Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>|${build.builder}!`);
                             build.responded = true;
                         } else {
                             robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status "${status.text}". @topher`);
