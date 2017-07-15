@@ -122,6 +122,7 @@ module.exports = function(robot) {
                                 preRequestBuilderStatus = JSON.parse(body);
                                 if (preRequestBuilderStatus.currentBuilds.length !== 1) {
                                     res.send("Build started, but unable to find build id. Monitoring disabled");
+                                    return;
                                 }
 
                                 const buildId = preRequestBuilderStatus.currentBuilds[0];
