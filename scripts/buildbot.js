@@ -22,12 +22,14 @@ if (!BUILDBOT_URL) {
   console.log("no HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH in environment: please set and try again");
   process.exit(1);
 }
+const DEBUG_LOGGING = process.env.HUBOT_DEBUG_LOGGING;
+if (DEBUG_LOGGING) {
+    console.log('debug logging ON');
+}
 
 const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
 
 const cronJob = require('cron').CronJob;
-
-const DEBUG_LOGGING = false;
 
 module.exports = function(robot) {
 
