@@ -10,6 +10,7 @@
 // Commands:
 //   hubot build <branch> on <builder>. <reason>
 //   hubot build <branch> on <builder> with full on. <reason>
+//   hubot buildbot auth <_oauthproxy cookie value> - update buildbot auth
 //
 // Author:
 //   t.brown@wordstream.com
