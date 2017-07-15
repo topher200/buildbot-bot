@@ -214,10 +214,10 @@ module.exports = function(robot) {
                             build.responded = true;
                         } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
                             if (statusText.toLowerCase() != 'failed') {
-                                robot.messageRoom(build.room, `:badbot: Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
+                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
                             } else {
                                 // boring message
-                                robot.messageRoom(build.room, `:badbot: Build ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:`);
+                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:`);
                             }
                             build.responded = true;
                         } else {
