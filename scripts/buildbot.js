@@ -9,6 +9,7 @@
 //
 // Commands:
 //   hubot build <branch> on <builder>. <reason>
+//   hubot build <branch> on <builder> with full on. <reason>
 //
 // Author:
 //   t.brown@wordstream.com
@@ -30,10 +31,20 @@ const DEBUG_LOGGING = false;
 module.exports = function(robot) {
 
     let notifier;
-    robot.respond(/build (.*) on (.*)/i, function(res) {
+    robot.respond(/build (.*) on ([^\s.]*)( ?[^\.]*)\.? ?(.*)/i, function(res) {
         // parse request
         const branch = res.match[1];
         const builder = res.match[2];
+        const full_on_text = res.match[3];
+        const reason_input = res.match[4];
+        var checkbox = '',
+            reason = reason_input;
+        if (full_on_text.includes('full') && full_on_text.includes('on')) {
+            checkbox = 'full_on';
+        }
+        if (!reason_input) {
+            reason = branch;
+        }
 
         // check if there's already something building
         robot.http(BUILDBOT_URL + "/json/builders/" + builder)
@@ -61,10 +72,11 @@ module.exports = function(robot) {
                 // nothing already building, make a request to build
                 const payload = querystring.stringify({
                     username: res.envelope.user.name,
-                    reason: 'toph test',  // TODO
+                    reason: reason,
                     branch,
                     forcescheduler: 'force',
-                    revision: ''
+                    revision: '',
+                    checkbox: checkbox
                 });
                 robot.http(BUILDBOT_URL + "/builders/" + builder + "/force")
                     .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
@@ -108,7 +120,11 @@ module.exports = function(robot) {
                                 }
 
                                 const buildId = preRequestBuilderStatus.currentBuilds[0];
-                                res.send(`Building ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}>`);
+                                if (checkbox) {
+                                    res.send(`Building ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}> with full=on`);
+                                } else {
+                                    res.send(`Building ${branch} on <${builder}|${BUILDBOT_URL}/builders/${builder}/builds/${buildId}>`);
+                                }
                                 let builds = robot.brain.get('builds');
                                 if (!builds) {
                                     builds = [];
@@ -165,7 +181,7 @@ module.exports = function(robot) {
                             robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> failed`);
                             build.responded = true;
                         } else if (status.text.includes('successful')) {
-                            robot.messageRoom(build.room, `Build ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}> completed`);
+                            robot.messageRoom(build.room, `Built ${build.branch} on <${build.builder}|${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}>!`);
                             build.responded = true;
                         } else {
                             robot.messageRoom(build.room, `${build.builder}:${build.buildId} unknown status ${status.text}`);
