@@ -16,6 +16,7 @@
 //   t.brown@wordstream.com
 
 const querystring = require('querystring');
+const sleep = require('sleep');
 
 const BUILDBOT_URL = process.env.HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH;
 if (!BUILDBOT_URL) {
@@ -105,6 +106,9 @@ module.exports = function(robot) {
                             res.send(`Error occurred: ${result.statusCode}`);
                             return;
                         }
+
+                        // pause for a little sec so that buildbot can start the build (this api sucks)
+                        sleep.msleep(100);
 
                         // get the build id of the newly started build
                         robot.http(BUILDBOT_URL + "/json/builders/" + builder)
