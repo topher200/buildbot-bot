@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "author": "t.brown@wordstream.com",
-  "description": "Bot to control Buildbot through Slack",
+  "description": "Slackbot for wordstream",
   "dependencies": {
     "cron": "^0.3.3",
     "hubot": "^2.19.0",

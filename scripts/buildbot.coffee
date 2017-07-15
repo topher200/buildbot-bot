@@ -3,17 +3,13 @@
 #
 # TODO
 # Dependencies:
-#   "<module name>": "<module version>"
+#   "cron": "^0.3.3",
 #
 # Configuration:
-#   LIST_OF_ENV_VARS_TO_SET
+#   HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH: url to buildbot server
 #
 # Commands:
-#   hubot <trigger> - <what the respond trigger does>
-#   <trigger> - <what the hear trigger does>
-#
-# Notes:
-#   <optional notes required for the script>
+#   hubot build <branch> on <builder>. <reason>
 #
 # Author:
 #   t.brown@wordstream.com
