@@ -38,7 +38,8 @@ module.exports = function(robot) {
         const full_on_text = res.match[3];
         const reason_input = res.match[4];
         var checkbox = '',
-            reason = reason_input;
+            reason = reason_input,
+            preRequestBuilderStatus = {};
         if (full_on_text.includes('full') && full_on_text.includes('on')) {
             checkbox = 'full_on';
         }
@@ -62,7 +63,11 @@ module.exports = function(robot) {
                     res.send("Buildbot auth failed. @topher - fix me!");
                     return;
                 }
-                let preRequestBuilderStatus = JSON.parse(body);
+                try {
+                    preRequestBuilderStatus = JSON.parse(body);
+                } catch(e) {
+                    res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
+                }
                 if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
                     (preRequestBuilderStatus.pendingBuilds > 0)) {
                     res.send(`Build already in progress on ${builder}`);
