@@ -50,7 +50,7 @@ module.exports = function(robot) {
         if (!reason_input) {
             reason = branch;
         }
-        console.log('request received: "${branch}", "${builder}", "${checkbox}", "${reason}"');
+        console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
         // check if there's already something building
         robot.http(BUILDBOT_URL + "/json/builders/" + builder)
