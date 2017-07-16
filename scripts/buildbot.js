@@ -48,7 +48,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 return;
             }
             if (result.statusCode === 403) {
-                res.send("Buildbot auth failed. @topher - fix me!");
+                res.send(":badbot: Buildbot auth failed. @topher - fix me!");
                 return;
             }
             try {
@@ -63,7 +63,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
             }
             if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
                 (preRequestBuilderStatus.pendingBuilds > 0)) {
-                res.send(`Build already in progress on ${builder}`);
+                res.send(`:badbot: Build already in progress on ${builder}`);
                 return;
             }
 
