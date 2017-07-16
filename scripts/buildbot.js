@@ -32,9 +32,119 @@ const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
 
 const cronJob = require('cron').CronJob;
 
-module.exports = function(robot) {
+function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
+    console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
-    let notifier;
+    // check if there's already something building
+    robot.http(BUILDBOT_URL + "/json/builders/" + builder)
+        .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+        .header('Accept', 'application/json')
+        .get()(function(err, result, body) {
+            if (DEBUG_LOGGING) {
+                console.log(`Made pre-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
+            }
+            if (err) {
+                res.send(`Error occurred: ${err}. @topher`);
+                return;
+            }
+            if (result.statusCode === 403) {
+                res.send("Buildbot auth failed. @topher - fix me!");
+                return;
+            }
+            try {
+                preRequestBuilderStatus = JSON.parse(body);
+            } catch(e) {
+                res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
+                return;
+            }
+            if (!preRequestBuilderStatus.currentBuilds) {
+                res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
+                return;
+            }
+            if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
+                (preRequestBuilderStatus.pendingBuilds > 0)) {
+                res.send(`Build already in progress on ${builder}`);
+                return;
+            }
+
+            // nothing already building, make a request to build
+            const payload = querystring.stringify({
+                username: res.envelope.user.name,
+                reason: reason,
+                branch,
+                forcescheduler: 'force',
+                revision: '',
+                checkbox: checkbox
+            });
+            robot.http(BUILDBOT_URL + "/builders/" + builder + "/force")
+                .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+                .header('Content-Type', 'application/x-www-form-urlencoded')
+                .post(payload)(function(err, result, body) {
+                    if (DEBUG_LOGGING) {
+                        console.log(`Made build request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
+                    }
+                    if (err) {
+                        res.send(`Error occurred: ${err} @topher`);
+                        return;
+                    }
+                    if (result.statusCode === 403) {
+                        res.send("Buildbot auth failed 2. @topher - fix me!");
+                        return;
+                    }
+                    if (result.statusCode !== 302) {
+                        res.send(`Error occurred: ${result.statusCode} @topher`);
+                        return;
+                    }
+
+                    // pause for a little sec so that buildbot can start the build (this api sucks)
+                    sleep.msleep(100);
+
+                    // get the build id of the newly started build
+                    robot.http(BUILDBOT_URL + "/json/builders/" + builder)
+                        .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+                        .header('Accept', 'application/json')
+                        .get()(function(err, result, body) {
+                            if (DEBUG_LOGGING) {
+                                console.log(`Made post-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
+                            }
+                            if (err) {
+                                res.send(`Error occurred: ${err} @topher`);
+                                return;
+                            }
+                            if (result.statusCode === 403) {
+                                res.send("Buildbot auth failed 3. @topher - fix me!");
+                                return;
+                            }
+                            preRequestBuilderStatus = JSON.parse(body);
+                            if (preRequestBuilderStatus.currentBuilds.length !== 1) {
+                                res.send("Build started, but unable to find build id. Monitoring disabled");
+                                return;
+                            }
+
+                            const buildId = preRequestBuilderStatus.currentBuilds[0];
+                            if (checkbox) {
+                                res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}> with full=on`);
+                            } else {
+                                res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}>`);
+                            }
+                            let builds = robot.brain.get('builds');
+                            if (!builds) {
+                                builds = [];
+                            }
+                            builds.push({
+                                branch,
+                                builder,
+                                buildId,
+                                room: res.envelope.room,
+                                responded: false
+                            });
+                            robot.brain.set('builds', builds);
+                        });
+                });
+        });
+}
+
+module.exports = function(robot) {
     robot.respond(/build (\S*) on ([^\s.]*)( ?[^\.]*)\.? ?(.*)/i, function(res) {
         // parse request
         const branch = res.match[1];
@@ -50,115 +160,8 @@ module.exports = function(robot) {
         if (!reason_input) {
             reason = branch;
         }
-        console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
-        // check if there's already something building
-        robot.http(BUILDBOT_URL + "/json/builders/" + builder)
-            .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
-            .header('Accept', 'application/json')
-            .get()(function(err, result, body) {
-                if (DEBUG_LOGGING) {
-                    console.log(`Made pre-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
-                }
-                if (err) {
-                    res.send(`Error occurred: ${err}. @topher`);
-                    return;
-                }
-                if (result.statusCode === 403) {
-                    res.send("Buildbot auth failed. @topher - fix me!");
-                    return;
-                }
-                try {
-                    preRequestBuilderStatus = JSON.parse(body);
-                } catch(e) {
-                    res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
-                    return;
-                }
-                if (!preRequestBuilderStatus.currentBuilds) {
-                    res.send(`Error occurred - unable to parse Buildbot's response. Check your request!`);
-                    return;
-                }
-                if ((preRequestBuilderStatus.currentBuilds.length > 0) ||
-                    (preRequestBuilderStatus.pendingBuilds > 0)) {
-                    res.send(`Build already in progress on ${builder}`);
-                    return;
-                }
-
-                // nothing already building, make a request to build
-                const payload = querystring.stringify({
-                    username: res.envelope.user.name,
-                    reason: reason,
-                    branch,
-                    forcescheduler: 'force',
-                    revision: '',
-                    checkbox: checkbox
-                });
-                robot.http(BUILDBOT_URL + "/builders/" + builder + "/force")
-                    .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
-                    .header('Content-Type', 'application/x-www-form-urlencoded')
-                    .post(payload)(function(err, result, body) {
-                        if (DEBUG_LOGGING) {
-                            console.log(`Made build request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
-                        }
-                        if (err) {
-                            res.send(`Error occurred: ${err} @topher`);
-                            return;
-                        }
-                        if (result.statusCode === 403) {
-                            res.send("Buildbot auth failed 2. @topher - fix me!");
-                            return;
-                        }
-                        if (result.statusCode !== 302) {
-                            res.send(`Error occurred: ${result.statusCode} @topher`);
-                            return;
-                        }
-
-                        // pause for a little sec so that buildbot can start the build (this api sucks)
-                        sleep.msleep(100);
-
-                        // get the build id of the newly started build
-                        robot.http(BUILDBOT_URL + "/json/builders/" + builder)
-                            .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
-                            .header('Accept', 'application/json')
-                            .get()(function(err, result, body) {
-                                if (DEBUG_LOGGING) {
-                                    console.log(`Made post-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
-                                }
-                                if (err) {
-                                    res.send(`Error occurred: ${err} @topher`);
-                                    return;
-                                }
-                                if (result.statusCode === 403) {
-                                    res.send("Buildbot auth failed 3. @topher - fix me!");
-                                    return;
-                                }
-                                preRequestBuilderStatus = JSON.parse(body);
-                                if (preRequestBuilderStatus.currentBuilds.length !== 1) {
-                                    res.send("Build started, but unable to find build id. Monitoring disabled");
-                                    return;
-                                }
-
-                                const buildId = preRequestBuilderStatus.currentBuilds[0];
-                                if (checkbox) {
-                                    res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}> with full=on`);
-                                } else {
-                                    res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}>`);
-                                }
-                                let builds = robot.brain.get('builds');
-                                if (!builds) {
-                                    builds = [];
-                                }
-                                builds.push({
-                                    branch,
-                                    builder,
-                                    buildId,
-                                    room: res.envelope.room,
-                                    responded: false
-                                });
-                                robot.brain.set('builds', builds);
-                            });
-                    });
-            });
+        startBuildbotBuild(robot, res, branch, builder, checkbox, reason);
     });
 
     robot.respond(/buildbot auth (.*)/i, function(res) {
@@ -166,7 +169,7 @@ module.exports = function(robot) {
         return res.send('Set new auth!');
     });
 
-    notifier = new cronJob(
+    var notifier = new cronJob(
         CRON_TIME_EVERY_10_SECONDS,
         function() {
             const builds = robot.brain.get('builds');
