@@ -210,7 +210,7 @@ module.exports = function(robot) {
                         }
                         var statusText = '';
                         if (Array.isArray(status.text)) {
-                            statusText = status.text.join(' ');
+                            statusText = status.text.join(', ');
                         }
                         if (statusText.toLowerCase().includes('successful')) {
                             robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>`);
