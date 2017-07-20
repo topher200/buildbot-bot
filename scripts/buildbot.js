@@ -97,7 +97,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                     }
 
                     // pause for a little sec so that buildbot can start the build (this api sucks)
-                    sleep.msleep(100);
+                    sleep.msleep(200);
 
                     // get the build id of the newly started build
                     robot.http(BUILDBOT_URL + "/json/builders/" + builder)
