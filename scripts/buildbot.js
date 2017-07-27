@@ -154,7 +154,7 @@ module.exports = function(robot) {
         var checkbox = '',
             reason = reason_input,
             preRequestBuilderStatus = {};
-        if (full_on_text.includes('full') && full_on_text.includes('on')) {
+        if (full_on_text.includes('full') && full_on_text.includes('on') && !full_on_text.includes('out')) {
             checkbox = 'full_on';
         }
         if (!reason_input) {
