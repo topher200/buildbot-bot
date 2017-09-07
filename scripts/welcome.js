@@ -8,6 +8,7 @@
 //   - specify WELCOME_MESSAGE as the message to send
 //
 // Commands:
+//   hubot welcome me
 //
 // Author:
 //   t.brown@wordstream.com
