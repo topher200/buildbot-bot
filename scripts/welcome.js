@@ -1,3 +1,16 @@
+// Description:
+//   Sends a welcome message (direct message) to users who join a given set of channels
+//
+// Dependencies:
+//
+// Configuration:
+//   - specify ROOM_LIST as the set of channels
+//
+// Commands:
+//
+// Author:
+//   t.brown@wordstream.com
+
 var ROOM_LIST = ['bot-test', 'welcome-bot'];
 
 module.exports = function(robot) {
