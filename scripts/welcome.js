@@ -5,6 +5,7 @@
 //
 // Configuration:
 //   - specify ROOM_LIST as the set of channels
+//   - specify WELCOME_MESSAGE as the message to send
 //
 // Commands:
 //
@@ -12,6 +13,8 @@
 //   t.brown@wordstream.com
 
 var ROOM_LIST = ['bot-test', 'welcome-bot'];
+
+var WELCOME_MESSAGE = 'Welcome to Wordstream!';
 
 module.exports = function(robot) {
     robot.enter(function(res) {
@@ -21,7 +24,7 @@ module.exports = function(robot) {
             var userName = robot.adapter.client.rtm.dataStore.getDMByName(res.message.user.name);
             console.log(`sending welcome message to ${userName}`);
             // messages to users are sent like messages to rooms, except they're to a user's id
-            robot.messageRoom(userName.id, "Welcome to wordstream!");
+            robot.messageRoom(userName.id, WELCOME_MESSAGE);
         }
     });
 };
