@@ -30,6 +30,7 @@ module.exports = function(robot) {
 
     robot.respond(/welcome me/i, function(res) {
         var userName = robot.adapter.client.rtm.dataStore.getDMByName(res.message.user.name);
+        console.log(`responding to 'wecome me' from ${userName}`);
         robot.messageRoom(userName.id, WELCOME_MESSAGE);
     });
 };
