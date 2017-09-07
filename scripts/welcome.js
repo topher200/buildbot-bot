@@ -27,4 +27,9 @@ module.exports = function(robot) {
             robot.messageRoom(userName.id, WELCOME_MESSAGE);
         }
     });
+
+    robot.respond(/welcome me/i, function(res) {
+        var userName = robot.adapter.client.rtm.dataStore.getDMByName(res.message.user.name);
+        robot.messageRoom(userName.id, WELCOME_MESSAGE);
+    });
 };
