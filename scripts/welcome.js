@@ -18,6 +18,7 @@ var ROOM_LIST = ['bot-test', 'welcome-bot'];
 var WELCOME_MESSAGE = 'Welcome to Wordstream!';
 
 module.exports = function(robot) {
+    // Any time a new user joins one of the channels in ROOM_LIST, send them the message
     robot.enter(function(res) {
         var roomName = robot.adapter.client.rtm.dataStore.getChannelGroupOrDMById(res.message.room).name;
         var userName = res.message.user.name;
@@ -30,6 +31,7 @@ module.exports = function(robot) {
         }
     });
 
+    // Any time someone asks for a 'welcome me', send them the message. used for testing
     robot.respond(/welcome me/i, function(res) {
         var userName = res.message.user.name;
         var userObject = robot.adapter.client.rtm.dataStore.getDMByName(userName);
