@@ -26,7 +26,7 @@ module.exports = function(robot) {
             var userObject = robot.adapter.client.rtm.dataStore.getDMByName(res.message.user.name);
             console.log(`sending welcome message to ${userName}`);
             // messages to users are sent like messages to rooms, except they're to a user's id
-            robot.messageRoom(userObject.id, WELCOME_MESSAGE);
+            robot.messageRoom(`@${userName}`, WELCOME_MESSAGE);
         }
     });
 
@@ -34,6 +34,6 @@ module.exports = function(robot) {
         var userName = res.message.user.name;
         var userObject = robot.adapter.client.rtm.dataStore.getDMByName(userName);
         console.log(`responding to 'welcome me' from ${userName}`);
-        robot.messageRoom(userObject.id, WELCOME_MESSAGE);
+        robot.messageRoom(`@${userName}`, WELCOME_MESSAGE);
     });
 };
