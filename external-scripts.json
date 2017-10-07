@@ -1,7 +1,5 @@
 [
   "hubot-diagnostics",
   "hubot-help",
-  "hubot-pugme",
-  "hubot-redis-brain",
-  "hubot-shipit"
+  "hubot-redis-brain"
 ]
