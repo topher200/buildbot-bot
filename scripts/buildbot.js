@@ -10,7 +10,7 @@
 // Commands:
 //   hubot build <branch> on <builder>. <reason>
 //   hubot build <branch> on <builder> with full on. <reason>
-//   hubot buildbot auth <_oauthproxy cookie value> - update buildbot auth
+//   hubot auth <_oauthproxy cookie value> - update buildbot auth
 //
 // Author:
 //   t.brown@wordstream.com
@@ -164,7 +164,7 @@ module.exports = function(robot) {
         startBuildbotBuild(robot, res, branch, builder, checkbox, reason);
     });
 
-    robot.respond(/buildbot auth (.*)/i, function(res) {
+    robot.respond(/auth (.*)/i, function(res) {
         robot.brain.set('oauthproxy', res.match[1]);
         return res.send('Set new auth!');
     });
