@@ -5,17 +5,17 @@ const { expect } = chai;
 
 const helper = new Helper('../scripts/buildbot.js');
 
-const OAUTHPROXY = process.env.HUBOT_OAUTHPROXY_VAL;
-if (!OAUTHPROXY) {
-    console.log("no HUBOT_OAUTHPROXY_VAL in environment: testing may be broken");
+const HTTP_AUTH = process.env.HUBOT_HTTP_AUTH;
+if (!HTTP_AUTH) {
+    console.log("no HUBOT_HTTP_AUTH in environment: testing may be broken");
 }
 
 describe('buildbot integration', function() {
     beforeEach(function() {
         this.room = helper.createRoom();
-        if (!this.room.robot.brain.get('oauthproxy')) {
-            console.log('setting oauthproxy val from env, for testing');
-            this.room.robot.brain.set('oauthproxy', OAUTHPROXY);
+        if (!this.room.robot.brain.get('http_auth')) {
+            console.log('setting http_auth val from env, for testing');
+            this.room.robot.brain.set('http_auth', HTTP_AUTH);
         }
     });
 

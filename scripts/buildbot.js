@@ -10,7 +10,7 @@
 // Commands:
 //   hubot build <branch> on <builder>. <reason>
 //   hubot build <branch> on <builder> with full on. <reason>
-//   hubot auth <_oauthproxy cookie value> - update buildbot auth
+//   hubot auth <apache username:password, encoded> - update buildbot auth
 //
 // Author:
 //   t.brown@wordstream.com
@@ -37,7 +37,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
 
     // check if there's already something building
     robot.http(BUILDBOT_URL + "/json/builders/" + builder)
-        .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+        .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
         .get()(function(err, result, body) {
             if (DEBUG_LOGGING) {
@@ -77,7 +77,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 checkbox: checkbox
             });
             robot.http(BUILDBOT_URL + "/builders/" + builder + "/force")
-                .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+                .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                 .header('Content-Type', 'application/x-www-form-urlencoded')
                 .post(payload)(function(err, result, body) {
                     if (DEBUG_LOGGING) {
@@ -101,7 +101,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
 
                     // get the build id of the newly started build
                     robot.http(BUILDBOT_URL + "/json/builders/" + builder)
-                        .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+                        .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                         .header('Accept', 'application/json')
                         .get()(function(err, result, body) {
                             if (DEBUG_LOGGING) {
@@ -165,7 +165,7 @@ module.exports = function(robot) {
     });
 
     robot.respond(/auth (.*)/i, function(res) {
-        robot.brain.set('oauthproxy', res.match[1]);
+        robot.brain.set('http_auth', res.match[1]);
         return res.send('Set new auth!');
     });
 
@@ -182,7 +182,7 @@ module.exports = function(robot) {
                 }
                 // figure out if the build is completed
                 robot.http(BUILDBOT_URL + "/json/builders/" + build.builder + "/builds/" + build.buildId)
-                    .header('Cookie', [`_oauthproxy="${robot.brain.get('oauthproxy')}"`])
+                    .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                     .header('Accept', 'application/json')
                     .get()(function(err, result, body) {
                         if (DEBUG_LOGGING) {

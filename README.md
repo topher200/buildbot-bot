@@ -13,11 +13,11 @@ This specific hubot is made to talk to buildbot v0.8
 #### Setup
 Set environment vars by filling out a `.env` in this dir. contents:
  * export HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH="https://buildbot.YOUR_SITE.com"
- * export HUBOT_OAUTHPROXY_VAL="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" <- cookie from browser
+ * export HUBOT_HTTP_AUTH="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" <- pass from apache
  * export HUBOT_DEBUG_LOGGING='on'  <--- very verbose!
 
-Set the `oauthproxy` var with the oauth_proxy cookie value in the hubot's redis
-brain by calling `hubot buildbot oauth <VAR>`.
+Set the `http_auth` var with the username:password combo in apache by calling
+`hubot buildbot auth <VAR>`.
 
 #### Running
 Run tests with
