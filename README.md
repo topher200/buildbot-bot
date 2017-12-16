@@ -15,7 +15,7 @@ Set environment vars by filling out a `.env` in this dir. contents:
  * export HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH="https://buildbot.YOUR_SITE.com"
  * export HUBOT_HTTP_AUTH="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" <- pass from apache
  * export HUBOT_DEBUG_LOGGING='on'  <--- very verbose!
- * export HUBOT_REJECT_BAD_SSL_CERTS= 1 | 0
+ * export HUBOT_ACCEPT_BAD_SSL_CERTS=true|false
 
 Set the `http_auth` var with the username:password combo in apache by calling
 `hubot buildbot auth <VAR>`.
