@@ -28,6 +28,13 @@ if (DEBUG_LOGGING) {
     console.log('debug logging ON');
 }
 
+const REJECT_BAD_SSL_CERTS = process.env.HUBOT_REJECT_BAD_SSL_CERTS;
+if (REJECT_BAD_SSL_CERTS) {
+    console.log('reject bad ssl certs ON');
+} else {
+    console.log('reject bad ssl certs OFF');
+}
+
 const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
 
 const cronJob = require('cron').CronJob;
@@ -36,7 +43,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
     console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
     // check if there's already something building
-    robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: false})
+    robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: REJECT_BAD_SSL_CERTS})
         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
         .get()(function(err, result, body) {
