@@ -30,7 +30,7 @@ if (DEBUG_LOGGING) {
 
 const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_ACCEPT_BAD_SSL_CERTS;
 if (ACCEPT_BAD_SSL_CERTS) {
-    console.log('warning - accept bad ssl certs ON');
+    console.log('warning - accept bad ssl certs is ON');
 }
 
 const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
@@ -81,7 +81,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 revision: '',
                 checkbox: checkbox
             });
-            robot.http(BUILDBOT_URL + "/builders/" + builder + "/force")
+            robot.http(BUILDBOT_URL + "/builders/" + builder + "/force", {rejectUnauthorized: ACCEPT_BAD_SSL_CERTS})
                 .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                 .header('Content-Type', 'application/x-www-form-urlencoded')
                 .post(payload)(function(err, result, body) {
@@ -105,7 +105,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                     sleep.msleep(100);
 
                     // get the build id of the newly started build
-                    robot.http(BUILDBOT_URL + "/json/builders/" + builder)
+                    robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: ACCEPT_BAD_SSL_CERTS})
                         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                         .header('Accept', 'application/json')
                         .get()(function(err, result, body) {
@@ -186,7 +186,8 @@ module.exports = function(robot) {
                     return;
                 }
                 // figure out if the build is completed
-                robot.http(BUILDBOT_URL + "/json/builders/" + build.builder + "/builds/" + build.buildId)
+                robot.http(BUILDBOT_URL + "/json/builders/" + build.builder + "/builds/" + build.buildId,
+                           {rejectUnauthorized: ACCEPT_BAD_SSL_CERTS})
                     .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                     .header('Accept', 'application/json')
                     .get()(function(err, result, body) {
