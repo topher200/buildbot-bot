@@ -46,6 +46,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
         .header('Accept', 'application/json')
         .get()(function(err, result, body) {
             if (!result) {
+                console.log('Error occurred, no request received 1');
                 res.send(`Error occurred, no response received. @topher`);
                 return;
             }
@@ -90,6 +91,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 .header('Content-Type', 'application/x-www-form-urlencoded')
                 .post(payload)(function(err, result, body) {
                     if (!result) {
+                        console.log('Error occurred, no request received 2');
                         res.send(`Error occurred, no response received. @topher`);
                         return;
                     }
@@ -118,6 +120,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                         .header('Accept', 'application/json')
                         .get()(function(err, result, body) {
                             if (!result) {
+                                console.log('Error occurred, no request received 3');
                                 res.send(`Error occurred, no response received. @topher`);
                                 return;
                             }
@@ -208,6 +211,7 @@ module.exports = function(robot) {
                     .header('Accept', 'application/json')
                     .get()(function(err, result, body) {
                         if (!result) {
+                            console.log('Error occurred, no request received 4');
                             res.send(`Error occurred, no response received. @topher`);
                             return;
                         }
