@@ -5,7 +5,7 @@
 //   "cron": "^0.3.3",
 //
 // Configuration:
-//   HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH: url to buildbot server
+//   see README.md
 //
 // Commands:
 //   hubot build <branch> on <builder>. <reason>
@@ -22,6 +22,11 @@ const BUILDBOT_URL = process.env.HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH;
 if (!BUILDBOT_URL) {
   console.log("no HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH in environment: please set and try again");
   process.exit(1);
+}
+const VISIBLE_BUILDBOT_URL = process.env.HUBOT_VISIBLE_BUILDBOT_URL_NO_TRAILING_SLASH;
+if (!VISIBLE_BUILDBOT_URL) {
+    console.log("no HUBOT_VISIBLE_BUILDBOT_URL_NO_TRAILING_SLASH in environment: please set and try again");
+    process.exit(1);
 }
 const DEBUG_LOGGING = process.env.HUBOT_DEBUG_LOGGING;
 if (DEBUG_LOGGING) {
@@ -146,9 +151,9 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
 
                             const buildId = preRequestBuilderStatus.currentBuilds[0];
                             if (checkbox) {
-                                res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}> with full=on`);
+                                res.send(`Building ${branch} on <${VISIBLE_BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}> with full=on`);
                             } else {
-                                res.send(`Building ${branch} on <${BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}>`);
+                                res.send(`Building ${branch} on <${VISIBLE_BUILDBOT_URL}/builders/${builder}/builds/${buildId}|${builder}>`);
                             }
                             let builds = robot.brain.get('builds');
                             if (!builds) {
@@ -246,14 +251,14 @@ module.exports = function(robot) {
                             statusText = status.text.join(', ');
                         }
                         if (statusText.toLowerCase().includes('successful')) {
-                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>`);
+                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>`);
                             build.responded = true;
                         } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
                             if (statusText.toLowerCase() != 'failed') {
-                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
+                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:: "${statusText}"`);
                             } else {
                                 // boring message
-                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:`);
+                                robot.messageRoom(build.room, `:badbot: Building ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}> :fire:failed:fire:`);
                             }
                             build.responded = true;
                         } else {
