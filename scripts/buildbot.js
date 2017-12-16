@@ -26,6 +26,7 @@ if (!BUILDBOT_URL) {
 const DEBUG_LOGGING = process.env.HUBOT_DEBUG_LOGGING;
 if (DEBUG_LOGGING) {
     console.log('debug logging ON');
+    require('request').debug = true;
 }
 
 const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_ACCEPT_BAD_SSL_CERTS;
