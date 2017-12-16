@@ -26,7 +26,6 @@ if (!BUILDBOT_URL) {
 const DEBUG_LOGGING = process.env.HUBOT_DEBUG_LOGGING;
 if (DEBUG_LOGGING) {
     console.log('debug logging ON');
-    robot.http.debug = true;
 }
 
 const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_ACCEPT_BAD_SSL_CERTS;
@@ -42,6 +41,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
     console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
     // check if there's already something building
+    robot.http.debug = true;
     robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: !ACCEPT_BAD_SSL_CERTS})
         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
