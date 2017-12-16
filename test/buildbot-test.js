@@ -40,7 +40,7 @@ describe('buildbot integration', function() {
         it('should respond with "already building" message', function() {
             expect(this.room.messages).to.eql([
                 ['alice', 'hubot build stable_db_migration on demo-ppc-four'],
-                ['hubot', 'Build already in progress on demo-ppc-four']
+                ['hubot', ':badbot: Build already in progress on demo-ppc-four']
             ]);
         });
     });
