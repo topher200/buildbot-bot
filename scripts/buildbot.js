@@ -45,6 +45,10 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
         .get()(function(err, result, body) {
+            if (!result) {
+                res.send(`Error occurred, no response received. @topher`);
+                return;
+            }
             if (DEBUG_LOGGING) {
                 console.log(`Made pre-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
             }
@@ -85,6 +89,10 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                 .header('Content-Type', 'application/x-www-form-urlencoded')
                 .post(payload)(function(err, result, body) {
+                    if (!result) {
+                        res.send(`Error occurred, no response received. @topher`);
+                        return;
+                    }
                     if (DEBUG_LOGGING) {
                         console.log(`Made build request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                     }
@@ -109,6 +117,10 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                         .header('Accept', 'application/json')
                         .get()(function(err, result, body) {
+                            if (!result) {
+                                res.send(`Error occurred, no response received. @topher`);
+                                return;
+                            }
                             if (DEBUG_LOGGING) {
                                 console.log(`Made post-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                             }
@@ -191,6 +203,10 @@ module.exports = function(robot) {
                     .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                     .header('Accept', 'application/json')
                     .get()(function(err, result, body) {
+                        if (!result) {
+                            res.send(`Error occurred, no response received. @topher`);
+                            return;
+                        }
                         if (DEBUG_LOGGING) {
                             console.log(`build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
                         }
