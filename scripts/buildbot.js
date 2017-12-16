@@ -39,6 +39,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
     robot.http(BUILDBOT_URL + "/json/builders/" + builder)
         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
+        .rejectUnauthorized(false)
         .get()(function(err, result, body) {
             if (DEBUG_LOGGING) {
                 console.log(`Made pre-build GET request. ${err}, ${result.statusCode}, ${result.getHeader}, ${body}`);
