@@ -25,22 +25,22 @@ describe('buildbot integration', function() {
 
     return context('build branch on builder', function() {
         beforeEach(function(done) {
-            this.room.user.say('alice', 'hubot build stable_db_migration on demo-ppc-eight');
+            this.room.user.say('alice', 'hubot build stable_db_migration on demo-ppc-four');
             setTimeout(done, 1000);
         });
 
         it('should respond with build message', function() {
             expect(this.room.messages).to.eql([
-                ['alice', 'hubot build stable_db_migration on demo-ppc-eight'],
-                ['hubot', 'Building stable_db_migration on <https://buildbot.wordstream.com/builders/demo-ppc-eight/builds/185|demo-ppc-eight>']
+                ['alice', 'hubot build stable_db_migration on demo-ppc-four'],
+                ['hubot', 'Building stable_db_migration on <https://buildbot.wordstream.com/builders/demo-ppc-four/builds/185|demo-ppc-four>']
             ]);
         });
 
         // this test relies on timing - the previous build should still be going
         it('should respond with "already building" message', function() {
             expect(this.room.messages).to.eql([
-                ['alice', 'hubot build stable_db_migration on demo-ppc-eight'],
-                ['hubot', 'Build already in progress on demo-ppc-eight']
+                ['alice', 'hubot build stable_db_migration on demo-ppc-four'],
+                ['hubot', 'Build already in progress on demo-ppc-four']
             ]);
         });
     });
