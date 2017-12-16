@@ -41,7 +41,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
     console.log(`request received: "${branch}", "${builder}", "${checkbox}", "${reason}"`);
 
     // check if there's already something building
-    robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: REJECT_BAD_SSL_CERTS})
+    robot.http(BUILDBOT_URL + "/json/builders/" + builder, {rejectUnauthorized: !ACCEPT_BAD_SSL_CERTS})
         .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
         .header('Accept', 'application/json')
         .get()(function(err, result, body) {
