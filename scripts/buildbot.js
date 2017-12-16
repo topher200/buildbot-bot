@@ -86,11 +86,7 @@ function startBuildbotBuild(robot, res, branch, builder, checkbox, reason) {
                 revision: '',
                 checkbox: checkbox
             });
-            robot.http(BUILDBOT_URL + "/builders/" + builder + "/force", {
-                rejectUnauthorized: 0,
-                requestCert: 0,
-                agent: 0
-            })
+            robot.http(BUILDBOT_URL + "/builders/" + builder + "/force", {rejectUnauthorized: ACCEPT_BAD_SSL_CERTS})
                 .header('Authorization', `Basic ${robot.brain.get('http_auth')}`)
                 .header('Content-Type', 'application/x-www-form-urlencoded')
                 .post(payload)(function(err, result, body) {
