@@ -181,6 +181,11 @@ module.exports = function(robot) {
         startBuildbotBuild(robot, res, branch, builder, checkbox, reason);
     });
 
+    robot.respond(/checkauth/i, function(res) {
+        robot.brain.set('http_auth', res.match[1]);
+        return res.send('auth: `${robot.brain.get("http_auth")`');
+    });
+
     robot.respond(/auth (.*)/i, function(res) {
         robot.brain.set('http_auth', res.match[1]);
         return res.send('Set new auth!');
