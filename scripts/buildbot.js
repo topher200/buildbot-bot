@@ -28,11 +28,9 @@ if (DEBUG_LOGGING) {
     console.log('debug logging ON');
 }
 
-const REJECT_BAD_SSL_CERTS = process.env.HUBOT_REJECT_BAD_SSL_CERTS;
-if (REJECT_BAD_SSL_CERTS) {
-    console.log('reject bad ssl certs ON');
-} else {
-    console.log('reject bad ssl certs OFF');
+const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_REJECT_BAD_SSL_CERTS;
+if (ACCEPT_BAD_SSL_CERTS) {
+    console.log('warning - accept bad ssl certs ON');
 }
 
 const CRON_TIME_EVERY_10_SECONDS = '*/10 * * * * *';
