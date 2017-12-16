@@ -28,7 +28,7 @@ if (DEBUG_LOGGING) {
     console.log('debug logging ON');
 }
 
-const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_REJECT_BAD_SSL_CERTS;
+const ACCEPT_BAD_SSL_CERTS = process.env.HUBOT_ACCEPT_BAD_SSL_CERTS;
 if (ACCEPT_BAD_SSL_CERTS) {
     console.log('warning - accept bad ssl certs ON');
 }
