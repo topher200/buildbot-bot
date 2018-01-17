@@ -256,7 +256,7 @@ module.exports = function(robot) {
                             statusText = status.text.join(', ');
                         }
                         if (statusText.toLowerCase().includes('successful')) {
-                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>. <https://${build.something}${BUILT_APP_DOMAIN}|Profiles>`);
+                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>. :link:<https://${build.builder}.${BUILT_APP_DOMAIN}|Profiles page>`);
                             build.responded = true;
                         } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
                             if (statusText.toLowerCase() != 'failed') {
