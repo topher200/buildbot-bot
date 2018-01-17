@@ -28,6 +28,11 @@ if (!VISIBLE_BUILDBOT_URL) {
     console.log("no HUBOT_VISIBLE_BUILDBOT_URL_NO_TRAILING_SLASH in environment: please set and try again");
     process.exit(1);
 }
+const BUILT_APP_DOMAIN = process.env.HUBOT_BUILT_APP_DOMAIN;
+if (!BUILT_APP_DOMAIN) {
+    console.log("no HUBOT_BUILT_APP_DOMAIN in environment: please set and try again");
+    process.exit(1);
+}
 const DEBUG_LOGGING = process.env.HUBOT_DEBUG_LOGGING;
 if (DEBUG_LOGGING) {
     console.log('debug logging ON');
@@ -251,7 +256,7 @@ module.exports = function(robot) {
                             statusText = status.text.join(', ');
                         }
                         if (statusText.toLowerCase().includes('successful')) {
-                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>`);
+                            robot.messageRoom(build.room, `:goodbot: Built ${build.branch} on <${VISIBLE_BUILDBOT_URL}/builders/${build.builder}/builds/${build.buildId}|${build.builder}>. <https://${build.something}${BUILT_APP_DOMAIN}|Profiles>`);
                             build.responded = true;
                         } else if (statusText.toLowerCase().includes('failed') || statusText.includes('exception')) {
                             if (statusText.toLowerCase() != 'failed') {

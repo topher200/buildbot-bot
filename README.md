@@ -14,6 +14,7 @@ This specific hubot is made to talk to buildbot v0.8
 Set environment vars by filling out a `.env` in this dir. contents:
  * export HUBOT_BUILDBOT_URL_NO_TRAILING_SLASH="https://buildbot.YOUR_SITE.com"
  * export HUBOT_VISIBLE_BUILDBOT_URL_NO_TRAILING_SLASH="https://buildbot.YOUR_SITE.com"
+ * export HUBOT_BUILT_APP_DOMAIN="YOUR_SITE.com/admin"
  * export HUBOT_HTTP_AUTH="XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" <- pass from apache
  * export HUBOT_DEBUG_LOGGING='on'  <--- very verbose!
  * export HUBOT_ACCEPT_BAD_SSL_CERTS= 0 | 1
